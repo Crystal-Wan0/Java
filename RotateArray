@@ -1,0 +1,93 @@
+/*
+* TestTestRotate.java
+* Rotate a 2D arrays clockwise by 90 degree.
+*
+* Yifen Wan, 1693203
+* Last updated: 09/15/21
+*/
+
+import java.util.Scanner; // keyboard input
+import java.util.Random;
+
+public class TestRotate {
+  
+  // ********************************************
+    
+  // initialize 2d array with user input
+    
+  public static void input (int [][] arr2d, int rowSize, int colSize) {
+    Scanner stdIn = new Scanner(System.in);
+    
+    System.out.printf("Please enter %d x %d ints one by one: \n", rowSize, colSize);
+    
+    for (int r=0; r < rowSize; r++) {
+      // process row r: add2d[r] is a 1d array
+      for (int c=0; c < colSize; c++) {
+        System.out.printf("arr[%d][%d]: ", r, c);
+        arr2d[r][c] = stdIn.nextInt();
+      } // end column for
+    } // end row for
+    stdIn.close(); // Eclipse: requires to close an input stream obj after you're done using it   
+    }
+  
+  // ********************************************
+  
+  // display 2d array in table form
+  
+  public static void print (int[][] arr) {
+    for (int r=0; r<arr.length; r++) {
+      for (int c=0; c<arr[r].length; c++) {
+        System.out.printf("%6d", arr[r][c]);
+      }
+      System.out.println();
+    } // end outer for loop
+  }
+  
+  // ********************************************
+  
+  // rotate the 2d array clockwise 90 degree
+  
+  public static int[][] rotateRight(int[][] arr) {
+    int [][] result = new int[arr[0].length][arr.length];
+    
+    for (int i=0; i<arr.length; i++) {
+      for (int j=0; j<arr[i].length; j++) {
+        result[j][arr[i].length - i] = arr[i][j];
+      }
+    }
+    return result;
+  }
+
+  
+  //********************************************
+  
+  // call the methods in the main
+  
+  public static void main(String[] args) {
+
+    int[][] arr2d; // 2d arr to store numbers
+    final int ROW_SIZE = 4;
+    final int COL_SIZE = 3;
+    
+    Random randGen = new Random();
+
+    // create a 2d arr with 4 row, and 3 column
+
+    arr2d = new int[ROW_SIZE][COL_SIZE];
+
+    // initialize 2d array with user input
+    input(arr2d, ROW_SIZE, COL_SIZE);
+
+    // display 2d array
+    System.out.println("\nBefore Rotate: ");
+    print(arr2d);
+
+    // rotate the 2d array clockwise 90 degree and display it
+    System.out.println("\nAfter Rotate: ");
+    int [][] result = rotateRight(arr2d);
+    print(result);
+    
+  } // end main
+} // end class TestRotate
+
+
