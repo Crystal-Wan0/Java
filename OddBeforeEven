@@ -1,0 +1,68 @@
+# Java
+/************************************************
+* OddBeforeEven.java
+* This program check if all the odd numbers are
+* before all the even numbers in an array.
+*
+* Yifen Wan, 1693203
+* Last updated: 08/31/21
+************************************************/
+
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class OddBeforeEven {
+
+   // ************************************************************
+
+   // This method make sure all the odd numbers are before all the
+   // even numbers by finding the first even, and make sure all the
+   // numbers after that are all even. If the length of the array is
+   // 0 or 1, we return true no matter what.
+
+   public static boolean isOddEven(int[] arr) {
+      if (arr.length < 2) // return true for all the length of the arrays are 0 or 1
+         return true;
+
+      for (int i = 0; i < arr.length; ++i) {
+         if (arr[i] % 2 == 0) { // find the first occurance of even
+            for (int j = i + 1; j < arr.length; ++j) { // loop through all the elements after the first even
+               if (arr[j] % 2 != 0) // when odd found return false
+                  return false;
+            } // end inside for loop
+
+            return true; // after all the elements after the first even are not odd, return true
+         } // end if
+      } // end outer for loop
+      return true; // return true when no even found.
+   } // end isOddEven method
+
+   // ************************************************************
+
+   // for unit testing
+
+   public static void main(String[] args) {
+      int [] arr;
+      System.out.println("Testing started ...");
+
+      arr = new int[]{1, 2, -3};
+      System.out.println(Arrays.toString(arr));
+      if (isOddEven(arr) != false)
+         System.out.println("All odd numbers before even numbers failed");
+
+      arr = new int[]{7, 3, 6, 6};
+      System.out.println(Arrays.toString(arr));
+      if (isOddEven(arr) != true)
+         System.out.println("All odd numbers before even numbers failed");
+
+      arr = new int[]{-4};
+      System.out.println(Arrays.toString(arr));
+      if (isOddEven(arr) != true)
+         System.out.println("All odd numbers before even numbers failed");
+
+      arr = new int[]{};
+      System.out.println(Arrays.toString(arr));
+      if (isOddEven(arr) != true)
+         System.out.println("All odd numbers before even numbers failed");
+   } // end main
+} // end class OddBeforeEven
