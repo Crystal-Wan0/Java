@@ -1,0 +1,44 @@
+/*
+* Shape.java
+*
+* This program create the constructors, distance calculation between two centers of shapes
+* by calling the distanceBetween in the MyPoint class, override the toString method to
+* to display the shape.
+*
+* Yifen Wan, 1693203
+* Last updated: 10/05/21
+*/
+
+public class Shape {
+  private MyPoint center;
+  private String color;
+
+  // ********************************************
+
+  // empty parameter constructor
+
+  public Shape() {
+  }
+
+  // ********************************************
+
+  // constructor with two parameters
+
+  public Shape(MyPoint center, String color) {
+    this.center = center;
+    this.color = color;
+  }
+
+  public double distanceBetweenCenters (Shape other) {
+    return this.center.distanceBetween(other.center);
+  }
+
+  // ********************************************
+
+  // returns a String representation of this point in the format of (x=4,y=3)
+
+  public String toString() {
+    String result = "Center: "+ this.center + "; Color: " + this.color;
+    return result;
+  }
+}
