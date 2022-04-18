@@ -1,0 +1,102 @@
+/**********************************************************
+* TwoThreeGame.java
+* Yifen Wan
+*
+* This program is a game between the user and the computer
+* to remove 2 or 3 marbles, the player who removes the
+* last marble loses.
+**********************************************************/
+
+import java.util.Scanner;
+
+public class TwoThreeGame
+{
+  public static void main(String[] args)
+  {
+    Scanner stdIn = new Scanner(System.in);
+    int initialMarbles;   // number of Marbles to begin the game
+    int removeMarblesU;   // number of Marbles that the user removed
+    int removeMarblesC;   // number of Marbles that the computer removed
+    int remainMarbles;    // number of the remaining Marbles
+    char userGoFirst;     // user go first yes or no?
+    boolean usersTurn;    // user's turn or not?
+
+    usersTurn = false;
+
+    System.out.println("Welcome to the exciting game of Two Three!\n" +
+      "In this game, you and the computer alternate removing either\n" +
+      "2 or 3 marbles from a group of marbles until there are no " +
+      "marbles\nleft. The player who removes the last marble loses " +
+      "the game,\nand the other player wins.");
+
+    System.out.print("\nEnter the number of starting marbles: ");
+    initialMarbles = stdIn.nextInt();
+    while (initialMarbles <= 0)
+    {
+      System.out.println("Invalid input - must enter positive number.");
+      System.out.print("Enter the number of starting marbles: ");
+      initialMarbles = stdIn.nextInt();
+    }
+
+    System.out.print("\nDo you want to go first (y/n)? ");
+    userGoFirst = stdIn.next().charAt(0);
+    while (userGoFirst!='y' && userGoFirst!='n')
+    {
+      System.out.println("Invalid input - must enter y or n.");
+      System.out.print("Do you want to go first (y/n)? ");
+      userGoFirst = stdIn.next().charAt(0);
+    }
+    if (userGoFirst == 'y')
+      usersTurn = true;
+
+    remainMarbles = initialMarbles;
+    while (remainMarbles > 0)
+    {
+      if (usersTurn == true)
+      {
+        System.out.print("\nHow many do you want to remove - 2 or 3? ");
+        removeMarblesU = stdIn.nextInt();
+        while (removeMarblesU!=2 && removeMarblesU!=3)
+        {
+          System.out.println("Invalid input.");
+          System.out.print("How many do you want to remove - 2 or 3? ");
+          removeMarblesU = stdIn.nextInt();
+        }
+
+        remainMarbles -= removeMarblesU;
+        if (remainMarbles < 0)
+          remainMarbles = 0;
+        System.out.println("The number of remaining marbles is " +
+          remainMarbles + ".");
+
+        usersTurn = !usersTurn;
+      } // end of if
+
+      if (usersTurn==false && remainMarbles>0)
+      {
+        if (remainMarbles%5 == 0)
+          removeMarblesC = 3;
+        else if (remainMarbles%5 == 3)
+          removeMarblesC = 2;
+        else
+          removeMarblesC = (int) (Math.random() * 2) + 2;
+
+        remainMarbles -= removeMarblesC;
+        if (remainMarbles < 0)
+          remainMarbles = 0;
+
+        System.out.println("\nThe computer removes " +
+          removeMarblesC + " marbles.");
+        System.out.println("The number of remaining marbles is " +
+          remainMarbles + ".");
+
+        usersTurn = !usersTurn;
+      } // end if
+    } // end of while loop
+
+    if (usersTurn == true)
+      System.out.println("\nCongrats! You are the winner!");
+    else
+      System.out.println("\nGame Over. Sorry, the computer wins.");
+  } // end main
+} // end class TwoThreeGame
