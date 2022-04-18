@@ -1,0 +1,218 @@
+/*
+* WY03MailList.java
+*
+* This class creates a GUI program to calculate user's BMI
+*
+* Yifen Wan, 1693203
+* Last updated: 11/22/21
+*/
+
+import java.util.ArrayList;
+
+import javafx.application.Application;
+
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
+
+public class WY03BMI extends Application{              
+  private TextField bmiField; 
+  private TextArea output;
+  private TextArea error;
+  
+  private TextField feetField;
+  private TextField inchField;
+  private TextField weightField;
+  
+  ArrayList <Double> users = new ArrayList<>();
+  
+  public void start(Stage stage) { 
+    Label heightLabel = new Label("  1. Height: ");
+    Label feetLabel = new Label("      Feet");
+    Label inchLabel = new Label("    Inches");
+    feetField = new TextField();
+    feetField.setPrefColumnCount(8);
+    feetField.setEditable(true);
+    feetField.requestFocus();
+    inchField = new TextField();
+    inchField.setPrefColumnCount(8);
+    inchField.setEditable(true);
+    inchField.requestFocus();
+    
+    Label weightLabel = new Label("  2. Weight: "); 
+    Label poundLabel = new Label("      Pounds");
+    weightField = new TextField();
+    weightField.setPrefColumnCount(8);
+    weightField.setEditable(true);
+    weightField.requestFocus();
+    
+    Button calculateButton = new Button("Calculate BMI");
+    calculateButton.setDefaultButton(true);
+    calculateButton.setOnAction(e -> process());
+    
+    output = new TextArea();
+    output.setPrefRowCount(5);
+    output.setEditable(false);
+    
+    error = new TextArea();
+    error.setPrefRowCount(1);
+    error.setEditable(false);
+    
+    Label BMILabel = new Label("  Your BMI: ");    
+    bmiField = new TextField();
+    bmiField.setPrefColumnCount(8);
+    bmiField.setEditable(false);
+    bmiField.requestFocus();
+    
+    HBox heightUnitBar = new HBox (56, feetLabel, inchLabel);
+    HBox heightBar = new HBox (5, feetField, inchField);
+    HBox weightBar = new HBox (weightField);
+    HBox bmiBar = new HBox (15, BMILabel, bmiField);
+    VBox heightBox = new VBox (5, heightLabel, heightUnitBar, heightBar);
+    VBox weightBox = new VBox (5, weightLabel, poundLabel, weightBar);
+    VBox inputBox = new VBox (5, heightBox, weightBox, calculateButton, bmiBar, output, error);
+    
+    BorderPane root = new BorderPane();
+    root.setTop(inputBox);
+    
+    stage.setScene(new Scene(root));
+    stage.setTitle("WY03 | Calculate your BMI"); 
+    stage.show(); 
+  }
+  
+  private void process() {
+    String inputFeet = feetField.getText().trim();
+    int feet = 0;
+    String inputInch = inchField.getText().trim();
+    double inch = 0;
+    String inputWeight = weightField.getText().trim();
+    double weight = 0;
+    double height;
+    double bmi;
+    double percentage;
+    String percentOutput;
+    int heavierUsers = 0;
+    double normalLowerWeight;
+    double normalUpperWeight;
+    String lowerWeight;
+    String upperWeight;
+    
+    final double normalLowerLimit = 18.5;
+    final double normalUpperLimit = 25.0;
+    
+    String feetError = "Please enter a valid height in feet.";
+    String inchError = "Please enter a valid height in inches.";
+    String weightError = "Please enter a valid weight in pounds.";
+    
+    if (inputFeet.isEmpty()) {
+      error.setText("Your height(in feet) can't be empty.");
+      feetField.requestFocus();
+      return;
+    } 
+    else {
+      try {
+        feet = Integer.parseInt(inputFeet);
+        if (feet < 0 || feet > 10) {
+          error.setText(feetError);
+          feetField.requestFocus();
+          return;
+        }
+      } catch (NumberFormatException e) {
+        error.setText("Invalid height(in feet): " + e.getMessage());
+        feetField.requestFocus();
+        return;
+      }
+    }
+      
+    if (inputInch.isEmpty()) {
+      error.setText("Your height(in inches) can't be empty.");
+      inchField.requestFocus();
+      return;
+    } 
+    else {
+      try {
+        inch = Double.parseDouble(inputInch);
+        if (inch < 0 || inch >= 12.0) {
+          error.setText(inchError);
+          inchField.requestFocus();
+          return;
+        }
+      } catch (NumberFormatException e) {
+        error.setText("Invalid height(in inches): " + e.getMessage());
+        inchField.requestFocus();
+        return;
+      }
+    }
+    
+    if (inputWeight.isEmpty()) {
+      error.setText("Your weight(in pounds) can't be empty.");
+      weightField.requestFocus();
+      return;
+    } 
+    else {
+      try {
+        weight = Double.parseDouble(inputWeight);
+        if (weight < 0 || weight > 1500) {
+          error.setText(weightError);
+          weightField.requestFocus();
+          return;
+        }
+      } catch (NumberFormatException e) {
+        error.setText("Invalid weight(in pounds): " + e.getMessage());
+        weightField.requestFocus();
+        return;
+      }
+    }
+        
+
+    height = feet * 12 + inch;
+    bmi = (weight / height / height) * 703;
+    users.add(bmi);
+      
+    /* extra credit 1*/
+    for (int i=0; i<users.size(); i++) {
+      if (users.get(i) > bmi)
+        heavierUsers++;
+    }
+
+    /* extra credit 2*/
+    normalLowerWeight = normalLowerLimit * height * height / 703.0;
+    normalUpperWeight = normalUpperLimit * height * height / 703.0;
+    lowerWeight = String.format("%,.1f", normalLowerWeight);
+    upperWeight = String.format("%,.1f", normalUpperWeight);
+      
+    percentage = bmi < 18.5 ? 1.6 : (bmi < 25.0 ? 56.0 : 42.4);
+    percentOutput = String.format("%,.1f", percentage);
+      
+    bmiField.setText(String.format("%,.2f", bmi));
+      
+    /* extra credit 3*/
+    if (bmi < normalLowerLimit) 
+      output.setText("You are in the underweight category.");
+    else if (bmi <normalUpperLimit) 
+      output.setText("You are in the normal weight category.");
+    else
+      output.setText("You are in the overweight category.");
+      
+    output.appendText("\nThere are " + percentOutput + "% of people in the US are in the same weight category as you.");
+    output.appendText("\nThere are " + users.size() + " users used our program.");
+      
+    /* extra credit 1*/
+    if (bmi < 25 && heavierUsers > 1)
+      output.appendText("\nYour BMI is smaller than " + heavierUsers + "% users that used our program.");
+   
+    /* extra credit 2*/
+    if (bmi < normalLowerLimit || bmi >= normalUpperLimit)
+      output.appendText("\nFor your height, the normal weight range is " + lowerWeight + " to " + upperWeight + "pounds.");
+  }
+  
+  public static void main(String [] args) {
+    launch(args); 
+  }
+}
